@@ -1,51 +1,34 @@
-﻿var seed = new Random();
-
-var random = seed.Next(0, 100);
+﻿var randoms = new Random();
+var random = randoms.Next(0, 100);
+var won = false;
+var answers = new List<string>();
+var input = "";
+var couldParse = false;
 
 Console.WriteLine("Guess a number between 0 and 100");
 
-var tryCount = 0;
-var repeat = true;
-var answers = new List<string>();
-
-do
-{
-	var parse = 0;
-	var input = Console.ReadLine();
+do {
+	input = Console.ReadLine();
 	answers.Add(input!);  // ! assumes that input is not null
+	couldParse = int.TryParse(input, out int guess);
 
-	if (int.TryParse(input, out parse) == false)
-	{
+	if (couldParse is false) {
 		Console.WriteLine("Not a number");
-		repeat = true;
-	}
-	else if (parse < 0 || parse > 99)
-	{
+	} else if (guess < 0 || guess > 99) {
 		Console.WriteLine("Outside of allowed range");
-		repeat = true;
-	}
-	else if (parse == random)
-	{
+	} else if (guess == random) {
 		Console.WriteLine("Correct, yeah");
-		repeat = false;
-	}
-	else if (parse < random)
-	{
+		won = true;
+	} else if (guess < random) {
 		Console.WriteLine("Too low... LOL");
-		repeat = true;
-	}
-	else if (parse > random)
-	{
+	} else if (guess > random) {
 		Console.WriteLine("Too high... rofl");
-		repeat = true;
 	}
-	++tryCount;
-} while (repeat);
+} while (won is false);
 
-Console.WriteLine($"Your tries: {tryCount}");
+Console.WriteLine($"Your tries: {answers.Count}");
 Console.Write($"Your guesses where: ");
-foreach (var answer in answers)
-{
+foreach (var answer in answers) {
 	Console.Write($"{answer} ");
 }
 Console.WriteLine();

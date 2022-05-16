@@ -1,10 +1,11 @@
 # Task
 
-- Create a console game
-- player is asked to guess a number from `0` to `99`
-- the number is chosen by the game randomly
-- the player can try until the correct answer has been supplied
-- the game tells the user on a wrong input, weather the guess was too high or
-  too slow
-- the game tracks the user's attempts
-- At the end of the game the attempts are shown
+- Guess 100
+- game that lets player guess a random number from `0` to `99`
+- on player guesses:
+  - too high: can try again with hint that guess was too high
+  - too low: can try again with hint that guess was too low
+  - correct: player wins and display final screen
+- final screen:
+  - show number of tries
+  - show guessed numbers

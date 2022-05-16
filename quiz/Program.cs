@@ -1,25 +1,24 @@
-﻿Console.WriteLine("Welche Farbe hat grünes Grassssss?");
-Console.WriteLine("a: blua, b: grün, c: gelb, d: pink");
+﻿Console.WriteLine("What color is green grass?");
+Console.WriteLine("a: blue, b: green, c: yellow, d: pink");
 
 var repeat = true;
 
-do
-{
+do {
 	var input = Console.ReadLine();
-	switch (input)
-	{
+	switch (input) {
 		case "a":
 		case "c":
 		case "d":
-			Console.WriteLine("Falsch, u fool");
+			Console.WriteLine("Wrong. (really? you got that wrong?)");
+			Console.WriteLine("The correct answer is: green");
 			repeat = false;
 			break;
 		case "b":
-			Console.WriteLine("Richtig, u rock");
+			Console.WriteLine("Correct, u rock");
 			repeat = false;
 			break;
 		default:
-			Console.WriteLine("U SUCK, U CAN DO NOTHING RIGHT!!!!");
+			Console.WriteLine("Choose a valid answer... (what a fool)");
 			break;
 	}
 } while (repeat);

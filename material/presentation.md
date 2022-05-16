@@ -185,3 +185,76 @@ do {
 	Console.WriteLine(" (press any key to update or ESC to quit)");
 } while (Console.ReadKey().Key != ConsoleKey.Escape);
 ```
+
+## Branching
+
+### If
+
+```csharp
+var value = 42;
+
+if (value > 42) {
+	Console.WriteLine("Very big")
+}
+```
+
+### If else-if
+
+```csharp
+var value = 42;
+
+if (value > 42) {
+	Console.WriteLine("Very big");
+} else if(value == 42) {
+	Console.WriteLine("Perfect");
+}
+```
+
+### If else-if else
+
+```csharp
+var value = 42;
+
+if (value > 42) {
+	Console.WriteLine("Very big");
+} else if(value == 42) {
+	Console.WriteLine("Perfect");
+} else {
+	Console.WriteLine("so tiny, so very very tiny");
+}
+```
+
+### Switch statement
+
+```csharp
+var value = 42;
+
+switch (value) {
+	case 42:
+		Console.WriteLine("Perfect 42");
+		break;
+	case 11:
+		Console.WriteLine("Perfect 11");
+		break;
+	case 5:
+		Console.WriteLine("Perfect 5");
+		break;
+	default:
+		Console.WriteLine("Wring");
+		break;
+}
+```
+
+### Switch expression
+
+```csharp
+var value = 42;
+
+var msg = value switch {
+	> 42 => "So very large";
+	< 42 => "So very tiny";
+	_ => "Perfect";
+}
+
+Console.WriteLine(msg);
+```

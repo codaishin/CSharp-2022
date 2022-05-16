@@ -431,3 +431,240 @@ var msg = value switch {
 
 Console.WriteLine(msg);
 ```
+
+
+## Functions/Methods
+
+- **accessors**: defines how function can be accessed
+- **return type**: type returned by the function
+- **name**: name of the function
+- **parameters**: parameters injected into function
+- Convention: `camelCase` with first character `UPPERCASE`
+
+### Local Function
+
+- no accessors
+
+```csharp
+int Sum(int a, int b) {
+	return a + b;
+}
+
+var sum = Sum(2, 4);
+Console.WriteLine(sum);
+```
+
+### Static Method
+```csharp
+class Program {
+	static int Sum(int a, int b) {
+		return a + b;
+	}
+
+	public static void Main(string[] args) {
+		var sum = Program.Sum(2, 4);
+		Console.WriteLine(sum);
+	}
+}
+```
+
+### Without Return Value and no Parameters
+
+```csharp
+class Program {
+	static void Print100() {
+		Console.WriteLine(100);
+	}
+
+	public static void Main() {
+		Program.Print100();  // prints 100
+	}
+}
+```
+
+### Without Return Value and with Parameters
+
+```csharp
+class Program {
+	static void Print(string value, bool uppercase) {
+		if (uppercase) {
+			value = value.ToUpper();
+		}
+		Console.WriteLine(value);
+	}
+
+	public static void Main() {
+		Program.Print("hello", true);  // prints HELLO
+	}
+}
+```
+
+### With Return Value and no Parameters
+
+```csharp
+class Program {
+	static int GetPerfectNumber() {
+		return 42;
+	}
+
+	public static void Main() {
+		Console.WriteLine(Program.GetPerfectNumber());  // prints 42
+	}
+}
+```
+
+### With Return Value and with Parameters
+
+```csharp
+class Program {
+	static int Sum(int a, int b) {
+		return a + b;
+	}
+
+	public static void Main() {
+		Console.WriteLine(Program.Sum(1, 2));  // prints 3
+	}
+}
+```
+
+### Default Parameters
+
+```csharp
+class Program {
+	static void Print(int[] values, bool delim = ", ") {
+		Console.WriteLine(string.Join(delim, values));
+	}
+
+	public static void Main() {
+		var array = new[] { 1, 2, 3 };
+		Program.Print(array);       // prints 1, 2, 3
+		Program.Print(array, "|");  // prints 1|2|3
+	}
+}
+```
+
+### Overloading
+
+- only with Methods in class, not possible with local functions
+
+```csharp
+class Program {
+	static int Sum(int a, int b, int c) {
+		return a + b + c;
+	}
+
+	static int Sum(int a, int b) {
+		return a + b;
+	}
+
+	public static void Main() {
+		Console.WriteLine(Sum(1, 2, 4));
+		Console.WriteLine(Sum(4, 2));
+	}
+}
+```
+
+### Params keyword
+
+```csharp
+class Program {
+	static int Sum(params int[] numbers) {
+		var sum = 0;
+		foreach (var number in numbers) {
+			sum += number;
+		}
+		return sum;
+	}
+
+	public static void Main() {
+		var array = new[] { 2, 9, 3 };
+		Console.WriteLine(Sum(array));  // prints 14
+		Console.WriteLine(Sum(2, 3, 1, 3));  // prints 9
+		Console.WriteLine(Sum(4, 2));  // prints 6
+	}
+}
+```
+
+### Out keyword
+
+```csharp
+class Program {
+	static bool Div(float a, float b, out float result) {
+		if (b == 0) {
+			result = float.NaN;
+			return false;
+		}
+		result = a / b;
+		return true;
+	}
+
+	public static void Main() {
+		var success = Program.Div(10, 0, out float result);
+		var msg = success ? $"result: {result}" : "null division error";
+		Console.WriteLine(msg);
+	}
+}
+```
+
+### Ref keyword
+
+```csharp
+class Program {
+	static void Swap(ref int a, ref int b) {
+		if (a == b) {
+			return;
+		}
+		var tmp = a;
+		a = b;
+		b = tmp;
+	}
+	public static void Main() {
+		var first = 1;
+		var second = 2;
+
+		Program.Swap(ref first, ref second);
+		Console.WriteLine($"{first}, {second}");  // prints 2, 1
+	}
+}
+```
+
+### Generic functions
+
+```csharp
+class Program {
+	static void Print<T>(T value, int times) {
+		for (int i = 0; i < times; ++i) {
+			Console.Write($"{value} ");
+		}
+		Console.WriteLine();
+	}
+
+	public static void Main() {
+		Program.Print(2.2, 3);      // prints 2.2, 2.2, 2.2
+		Program.Print(4, 2);        // prints 4 4
+		Program.Print("hello", 3);  // prints hello hello hello
+	}
+}
+```
+
+### Extensions
+
+- must be in a static class
+
+```csharp
+static class IntExtensions {
+	public static bool IsIn(this int elem, int[] elems) {
+		return elems.Contains(elem);
+	}
+}
+
+class Program {
+	public static void Main() {
+		var item = 5;
+		var items = new[] { 1, 2, 3, 4 };
+		Console.WriteLine(item.IsIn(items));
+		Console.WriteLine(IntExtensions.IsIn(item, items));
+	}
+}
+
+```

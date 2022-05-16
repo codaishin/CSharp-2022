@@ -5,6 +5,15 @@
 		},
 		{
 			"path": "../helloWorld"
+		},
+		{
+			"path": "../quiz"
+		},
+		{
+			"path": "../guess100"
+		},
+		{
+			"path": "../fibonacci"
 		}
 	],
 	"settings": {

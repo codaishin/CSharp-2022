@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../guess100"
+		},
+		{
+			"path": "../fibonacci"
 		}
 	],
 	"settings": {

@@ -143,6 +143,179 @@ var fullName = $"{firstName} {lastName}";   //combine with one " " in the middle
 Console.WriteLine(fullName[3]);             //print 2nd character
 ```
 
+### Struct
+
+```csharp
+struct Person {
+	public string name;
+	public int age;
+}
+
+class Program {
+	public static void Main() {
+		var personA = new Person {
+			name = "Mouse",
+			age = 42,
+		};
+		var personB = new Person {
+			name = "Mouse",
+			age = 42,
+		};
+
+		Console.WriteLine(personA == personB);  // will not compile, no == method
+		Console.WriteLine(personA.name);
+		Console.WriteLine(personA.age);
+		personA.age = 33;
+	}
+}
+
+```
+
+### Record
+
+```csharp
+public record struct Person {
+	public string Name { get; init; } = "Anonymous";
+	public int Age { get; init; } = 0;
+};
+
+class Program {
+	public static void Main() {
+		var personA = new Person {
+			Name = "Mouse",
+			Age = 42,
+		};
+		var personB = new Person {
+			Name = "Mouse",
+			Age = 42,
+		};
+
+		Console.WriteLine(personA == personB);  // true, because properties are equal
+		Console.WriteLine(person.Name);
+		Console.WriteLine(person.Age);
+		person.Age = 33;                        // will not compile, init only
+	}
+}
+```
+
+### Tuple
+
+```csharp
+var myTuple = (1, "hello", name: "Picard");
+Console.WriteLine(myTuple);  // prints: (1, hello, Picard)
+Console.WriteLine(myTuple.Item1);
+Console.WriteLine(myTuple.Item2);
+Console.WriteLine(myTuple.name);
+
+var (num, greeting, _) = myTuple;
+Console.WriteLine(num);
+Console.WriteLine(greeting);
+```
+
+### Enum
+
+```csharp
+enum MyEnum {
+	A = 0,
+	B = 1,
+	C = 2,
+}
+
+class Program {
+	public static void Main() {
+		var value = MyEnum.B;
+
+		Console.WriteLine(value);       // prints A
+		Console.WriteLine((int)value);  // prints 1
+	}
+}
+```
+
+### Flag
+
+```csharp
+[Flags]
+enum MyFlag {
+	A = 0b0001,  // could also write 1
+	B = 0b0010,  // could also write 2
+	C = 0b0100,  // could also wrote 4
+}
+
+class Program {
+	public static void Main() {
+		var value = MyFlag.B | MyFlag.C;
+
+		Console.WriteLine(value);                    // prints B, C
+		Console.WriteLine((int)value);               // prints 6
+		Console.WriteLine(value.HasFlag(MyFlag.A));  // prints false
+		Console.WriteLine(value.HasFlag(MyFlag.B));  // prints true
+		Console.WriteLine(value.HasFlag(MyFlag.C));  // prints true
+	}
+}
+```
+
+## Value vs. Reference Type
+
+- **value type**: copy by value (primitive types and structs)
+- **reference type**: copy by reference (classes)
+
+### Integer code example
+```csharp
+int a = 42;
+int b = a;
+b = 66;
+Console.WriteLine(b);
+```
+
+### Integer code example output
+
+- first we set the value `a` to `42`
+- then we copy the value of `a` into `b`
+- then we copy the value `66` into `b`
+```console
+$ 66
+```
+
+### Array code example 1
+```csharp
+var arrayA = new[] { 4, 2 };
+var arrayB = arrayA;
+arrayB[0] = 6;
+arrayB[1] = 6;
+Console.WriteLine(string.Join(", ", arrayA));
+```
+
+### Array code example 1 output
+
+- first we create an array and point `arrayA` towards it
+- then we point `arrayB` towards the same array
+- then we modify that array through `arrayB`
+- thus, reading that array through `arrayA` will show the changes
+```csharp
+$ 6, 6
+```
+
+### Array code example 2
+```csharp
+var arrayC = new[] { 4, 2 };
+var arrayD = arrayC;
+arrayD = new[] { 4, 2 };
+arrayD[0] = 6;
+arrayD[1] = 6;
+Console.WriteLine(string.Join(", ", arrayC));
+```
+
+### Array code example 2 output
+
+- first we create an array and point `arrayC` towards it
+- then we point `arrayD` towards the same array
+- then we point `arrayD` to another array
+- then we modify the other array through `arrayD`
+- thus, reading the first array through `arrayC` will show no changes
+```csharp
+$ 4, 2
+```
+
 ## Loops
 
 ### Index Based For Loop

@@ -251,9 +251,9 @@ switch (value) {
 var value = 42;
 
 var msg = value switch {
+	42 => "Perfect";
 	> 42 => "So very large";
-	< 42 => "So very tiny";
-	_ => "Perfect";
+	_ => "So very tiny";
 }
 
 Console.WriteLine(msg);

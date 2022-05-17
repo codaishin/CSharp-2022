@@ -811,3 +811,39 @@ class Program {
 	}
 }
 ```
+
+## Error Handling
+
+### Try catch finally
+
+```csharp
+try {
+	var value = 10 / 0;
+	Console.WriteLine(value);
+} catch (DivideByZeroException) {  // catch division error
+	Console.WriteLine("Cannot divide by zero");
+} catch (IOException error) {      // catch IO error
+	MyServer.Log(error.Message);
+} finally {                        // always happens
+	Console.WriteLine("We are done");
+}
+```
+
+### Throw own error
+
+```csharp
+class MyException : Exception {
+	public MyException(string msg) : base(msg) { }
+}
+
+class Program {
+	static string MySecretHashFunc(int source) {
+		if (source < 0) {
+			throw new MyException("source must no be negative");
+		}
+		...
+	}
+
+	...
+}
+```

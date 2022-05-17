@@ -225,7 +225,7 @@ class Program {
 	public static void Main() {
 		var value = MyEnum.B;
 
-		Console.WriteLine(value);       // prints A
+		Console.WriteLine(value);       // prints B
 		Console.WriteLine((int)value);  // prints 1
 	}
 }
@@ -264,7 +264,7 @@ class Program {
 int a = 42;
 int b = a;
 b = 66;
-Console.WriteLine(b);
+Console.WriteLine(a);
 ```
 
 ### Integer code example output
@@ -272,8 +272,9 @@ Console.WriteLine(b);
 - first we set the value `a` to `42`
 - then we copy the value of `a` into `b`
 - then we copy the value `66` into `b`
+- thus, we soo no changes in `a`
 ```console
-$ 66
+$ 42
 ```
 
 ### Array code example 1

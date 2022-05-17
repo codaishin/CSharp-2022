@@ -225,7 +225,7 @@ class Program {
 	public static void Main() {
 		var value = MyEnum.B;
 
-		Console.WriteLine(value);       // prints A
+		Console.WriteLine(value);       // prints B
 		Console.WriteLine((int)value);  // prints 1
 	}
 }

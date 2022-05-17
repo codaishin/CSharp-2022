@@ -1,6 +1,9 @@
 # CSharp-2022
 CSharp introduction
 
+## Presentation
+
+Presentation can be found in [material/presentation.md](./material/presentation.md)
 
 ## Formatting
 

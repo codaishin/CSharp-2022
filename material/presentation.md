@@ -317,6 +317,78 @@ Console.WriteLine(string.Join(", ", arrayC));
 $ 4, 2
 ```
 
+## Nullable type
+
+### Must be enabled
+
+- with `dotnet new console` per default enabled
+
+```
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		...
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
+```
+
+### Value can be null or the Given Type
+
+```csharp
+var value = "my value";      // implicitly string?
+var value = null as string;  // implicitly string?
+string? value = "my value";
+string? value = null;
+```
+
+### Useful to communicate functions success
+
+```csharp
+class Program {
+	public static void Main() {
+		var subscribers = GetValueFromApi("https://example.com/subscribers");
+		if (subscribers is null) {
+			Console.WriteLine("Failed to read subscribers");
+			return;
+		}
+		...
+	}
+}
+```
+
+### Nullability can be ignored with `!`
+
+```csharp
+class Program {
+	public static void Main() {
+		var subscribers = GetValueFromApi("https://example.com/subscribers");
+		foreach (var subscriber in subscribers!) {
+			...
+		}
+	}
+}
+```
+
+### Nullability: Value Type vs Reference Type
+
+#### Value Type
+```csharp
+int? count = GetValueFromApi("https://example.com/subscribers/count");
+if (count.HasValue) {
+	Console.WriteLine(count.Value);
+}
+```
+
+#### Reference Type
+```csharp
+Subscriber[]? subscribers = GetValueFromApi("https://example.com/subscribers");
+if (subscribers is not null) {   // subscribers != null
+	Console.WriteLine(string.Join(", ", subscribers));
+}
+```
+
 ## Loops
 
 ### Index Based For Loop

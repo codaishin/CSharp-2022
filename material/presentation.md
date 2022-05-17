@@ -2,13 +2,15 @@
 
 ## Content
 
-- data types, operators
-- control structures, loops
-- components
-- functions
-- string class
-- debugging, error handling
-- Microsoft documentation
+- [Simple Console App](#simple-console-app)
+- [Variables](#variables)
+- [Value vs. Reference Type](#value-vs-reference-type)
+- [Nullables](#nullables)
+- [Loops](#loops)
+- [Branching](#branching)
+- [Functions/Methods](#functionsmethods)
+- [File IO](#file-io)
+- [Error Handling](#error-handling)
 
 ## Simple Console App
 
@@ -57,7 +59,7 @@ Console.Write("You said: ");
 Console.WriteLine(input);
 ```
 
-
+[back to top](#content)
 
 ## Variables
 
@@ -94,9 +96,13 @@ var b = "3.3";
 var c = a + b;  // will not compile
 ```
 
-### Inbuilt types
+### Builtin types
 
-[-> Microsoft inbuilt types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types)
+- [-> numerical types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types)
+- [-> char](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/char)
+- [-> bool](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool)
+- [-> struct](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct)
+- [-> tuple](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples)
 
 ### Array
 
@@ -174,7 +180,7 @@ class Program {
 ### Record
 
 ```csharp
-public record struct Person {
+public record Person {
 	public string Name { get; init; } = "Anonymous";
 	public int Age { get; init; } = 0;
 };
@@ -254,6 +260,8 @@ class Program {
 }
 ```
 
+[back to top](#content)
+
 ## Value vs. Reference Type
 
 - **value type**: copy by value (primitive types and structs)
@@ -317,7 +325,9 @@ Console.WriteLine(string.Join(", ", arrayC));
 $ 4, 2
 ```
 
-## Nullable type
+[back to top](#content)
+
+## Nullables
 
 ### Must be enabled
 
@@ -376,7 +386,7 @@ class Program {
 #### Value Type
 ```csharp
 int? count = GetValueFromApi("https://example.com/subscribers/count");
-if (count.HasValue) {
+if (count.HasValue) {  // count is not null; count != null
 	Console.WriteLine(count.Value);
 }
 ```
@@ -388,6 +398,8 @@ if (subscribers is not null) {   // subscribers != null
 	Console.WriteLine(string.Join(", ", subscribers));
 }
 ```
+
+[back to top](#content)
 
 ## Loops
 
@@ -431,6 +443,8 @@ do {
 	Console.WriteLine(" (press any key to update or ESC to quit)");
 } while (Console.ReadKey().Key != ConsoleKey.Escape);
 ```
+
+[back to top](#content)
 
 ## Branching
 
@@ -505,6 +519,7 @@ var msg = value switch {
 Console.WriteLine(msg);
 ```
 
+[back to top](#content)
 
 ## Functions/Methods
 
@@ -741,6 +756,8 @@ class Program {
 }
 ```
 
+[back to top](#content)
+
 ## File IO
 
 ### Read File
@@ -812,6 +829,8 @@ class Program {
 }
 ```
 
+[back to top](#content)
+
 ## Error Handling
 
 ### Try catch finally
@@ -847,3 +866,5 @@ class Program {
 	...
 }
 ```
+
+[back to top](#content)

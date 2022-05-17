@@ -667,5 +667,75 @@ class Program {
 		Console.WriteLine(IntExtensions.IsIn(item, items));
 	}
 }
+```
 
+## File IO
+
+### Read File
+
+```csharp
+using var file = File.Open("text.txt", FileMode.Open);
+using var read = new StreamReader(file);
+
+string? line;
+while ((line = read.ReadLine()) is not null) {
+	Console.WriteLine(line);
+}
+```
+```csharp
+var lines = File.ReadAllLines("text.txt");
+foreach (var line in lines) {
+	Console.WriteLine(line);
+}
+```
+
+### Write File
+
+```csharp
+var lines = new string[] { "line a", "line a" };
+File.AppendAllLines("text.txt", lines);
+```
+```csharp
+using var file = File.Open("text.txt", FileMode.Append);
+using var write = new StreamWriter(file);
+
+write.WriteLine("line a");
+write.WriteLine("line b");
+```
+
+### Json Example File
+
+data.json
+```json
+[
+	{
+		"Name": "Harry",
+		"Age": 11
+	},
+	{
+		"Name": "Rudi",
+		"Age": 44
+	}
+]
+```
+
+### Read Json Example File
+
+```csharp
+using System.Text.Json;
+
+record Person {
+	public string Name { get; init; } = "";
+	public int Age { get; init; } = 0;
+}
+
+class Program {
+	public static void Main() {
+		var text = File.ReadAllText("data.json");
+		var persons = JsonSerializer.Deserialize<Person[]>(text)!;
+		foreach (var person in persons) {
+			Console.WriteLine(person);
+		}
+	}
+}
 ```

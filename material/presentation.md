@@ -2,13 +2,15 @@
 
 ## Content
 
-- data types, operators
-- control structures, loops
-- components
-- functions
-- string class
-- debugging, error handling
-- Microsoft documentation
+- [Simple Console App](#simple-console-app)
+- [Variables](#variables)
+- [Value vs. Reference Type](#value-vs-reference-type)
+- [Nullables](#nullables)
+- [Loops](#loops)
+- [Branching](#branching)
+- [Functions/Methods](#functionsmethods)
+- [File IO](#file-io)
+- [Error Handling](#error-handling)
 
 ## Simple Console App
 
@@ -57,7 +59,7 @@ Console.Write("You said: ");
 Console.WriteLine(input);
 ```
 
-
+[back to top](#content)
 
 ## Variables
 
@@ -94,9 +96,13 @@ var b = "3.3";
 var c = a + b;  // will not compile
 ```
 
-### Inbuilt types
+### Builtin types
 
-[-> Microsoft inbuilt types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types)
+- [-> numerical types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types)
+- [-> char](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/char)
+- [-> bool](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool)
+- [-> struct](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct)
+- [-> tuple](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples)
 
 ### Array
 
@@ -174,7 +180,7 @@ class Program {
 ### Record
 
 ```csharp
-public record struct Person {
+public record Person {
 	public string Name { get; init; } = "Anonymous";
 	public int Age { get; init; } = 0;
 };
@@ -254,6 +260,8 @@ class Program {
 }
 ```
 
+[back to top](#content)
+
 ## Value vs. Reference Type
 
 - **value type**: copy by value (primitive types and structs)
@@ -317,6 +325,82 @@ Console.WriteLine(string.Join(", ", arrayC));
 $ 4, 2
 ```
 
+[back to top](#content)
+
+## Nullables
+
+### Must be enabled
+
+- with `dotnet new console` per default enabled
+
+```
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		...
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
+```
+
+### Value can be null or the Given Type
+
+```csharp
+var value = "my value";      // implicitly string?
+var value = null as string;  // implicitly string?
+string? value = "my value";
+string? value = null;
+```
+
+### Useful to communicate functions success
+
+```csharp
+class Program {
+	public static void Main() {
+		var subscribers = GetValueFromApi("https://example.com/subscribers");
+		if (subscribers is null) {
+			Console.WriteLine("Failed to read subscribers");
+			return;
+		}
+		...
+	}
+}
+```
+
+### Nullability can be ignored with `!`
+
+```csharp
+class Program {
+	public static void Main() {
+		var subscribers = GetValueFromApi("https://example.com/subscribers");
+		foreach (var subscriber in subscribers!) {
+			...
+		}
+	}
+}
+```
+
+### Nullability: Value Type vs Reference Type
+
+#### Value Type
+```csharp
+int? count = GetValueFromApi("https://example.com/subscribers/count");
+if (count.HasValue) {  // count is not null; count != null
+	Console.WriteLine(count.Value);
+}
+```
+
+#### Reference Type
+```csharp
+Subscriber[]? subscribers = GetValueFromApi("https://example.com/subscribers");
+if (subscribers is not null) {   // subscribers != null
+	Console.WriteLine(string.Join(", ", subscribers));
+}
+```
+
+[back to top](#content)
+
 ## Loops
 
 ### Index Based For Loop
@@ -359,6 +443,8 @@ do {
 	Console.WriteLine(" (press any key to update or ESC to quit)");
 } while (Console.ReadKey().Key != ConsoleKey.Escape);
 ```
+
+[back to top](#content)
 
 ## Branching
 
@@ -433,6 +519,7 @@ var msg = value switch {
 Console.WriteLine(msg);
 ```
 
+[back to top](#content)
 
 ## Functions/Methods
 
@@ -667,5 +754,117 @@ class Program {
 		Console.WriteLine(IntExtensions.IsIn(item, items));
 	}
 }
-
 ```
+
+[back to top](#content)
+
+## File IO
+
+### Read File
+
+```csharp
+using var file = File.Open("text.txt", FileMode.Open);
+using var read = new StreamReader(file);
+
+string? line;
+while ((line = read.ReadLine()) is not null) {
+	Console.WriteLine(line);
+}
+```
+```csharp
+var lines = File.ReadAllLines("text.txt");
+foreach (var line in lines) {
+	Console.WriteLine(line);
+}
+```
+
+### Write File
+
+```csharp
+var lines = new string[] { "line a", "line a" };
+File.AppendAllLines("text.txt", lines);
+```
+```csharp
+using var file = File.Open("text.txt", FileMode.Append);
+using var write = new StreamWriter(file);
+
+write.WriteLine("line a");
+write.WriteLine("line b");
+```
+
+### Json Example File
+
+data.json
+```json
+[
+	{
+		"Name": "Harry",
+		"Age": 11
+	},
+	{
+		"Name": "Rudi",
+		"Age": 44
+	}
+]
+```
+
+### Read Json Example File
+
+```csharp
+using System.Text.Json;
+
+record Person {
+	public string Name { get; init; } = "";
+	public int Age { get; init; } = 0;
+}
+
+class Program {
+	public static void Main() {
+		var text = File.ReadAllText("data.json");
+		var persons = JsonSerializer.Deserialize<Person[]>(text)!;
+		foreach (var person in persons) {
+			Console.WriteLine(person);
+		}
+	}
+}
+```
+
+[back to top](#content)
+
+## Error Handling
+
+### Try catch finally
+
+```csharp
+try {
+	var value = 10 / 0;
+	Console.WriteLine(value);
+} catch (DivideByZeroException) {  // catch division error
+	Console.WriteLine("Cannot divide by zero");
+} catch (IOException error) {      // catch IO error
+	MyServer.Log(error.Message);
+} finally {                        // always happens
+	Console.WriteLine("We are done");
+}
+```
+
+### Throw own error
+
+```csharp
+class MyException : Exception {
+	public MyException(string msg) : base(msg) { }
+}
+
+class Program {
+	static string MySecretHashFunc(int source) {
+		if (source < 0) {
+			throw new MyException("source must no be negative");
+		}
+		...
+	}
+
+	...
+}
+```
+
+[back to top](#content)

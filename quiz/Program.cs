@@ -1,36 +1,51 @@
 ﻿class Program {
-
 	struct Question {
 		public string text;
-		public string answerA;
-		public string answerB;
-		public string answerC;
-		public string correctAnswer;
+		public string[] answers;
+		public int correctAnswer;
 	}
 
 	enum Status { CORRECT, INCORRECT, ERROR }
 
+	static string Letter(int index) {
+		return $"{(char)('a' + index)}";
+	}
+
+	static string[] AllLetters(Question question) {
+		var letters = new string[question.answers.Length];
+		for (int i = 0; i < question.answers.Length; ++i) {
+			letters[i] = Program.Letter(i);
+		};
+		return letters;
+	}
+
 	static string ToString(Question question) {
-		return $"{question.text}\na: {question.answerA}, b: {question.answerB}, c: {question.answerC}";
+		var answers = new string[question.answers.Length];
+		for (int i = 0; i < question.answers.Length; ++i) {
+			answers[i] = $"{Program.Letter(i)}: {question.answers[i]}";
+		}
+
+		return $"{question.text}\n{string.Join(", ", answers)}";
 	}
 
 	static string ToString(Question question, Status status) {
-		switch (status) {
-			case Status.CORRECT:
-				return "Correct!";
-			case Status.INCORRECT:
-				return $"Wong! The correct answer is {question.correctAnswer}";
-			default:
-				return "Invalid Answer, Try again";
-		}
+		return status switch {
+			Status.CORRECT => "Correct!",
+			Status.INCORRECT => string.Format(
+				"Wong! The correct answer is {0}: {1}",
+				Program.Letter(question.correctAnswer),
+				question.answers[question.correctAnswer]
+			),
+			_ => "Invalid Answer, Try again",
+		};
 	}
 
 	static Status Evaluate(Question question, string input) {
 		input = input.ToLower();
-		if (input == question.correctAnswer.ToLower()) {
+		if (input == Program.Letter(question.correctAnswer)) {
 			return Status.CORRECT;
 		}
-		if (input == "a" || input == "b" || input == "c") {
+		if (Program.AllLetters(question).Contains(input)) {
 			return Status.INCORRECT;
 		}
 		return Status.ERROR;
@@ -40,20 +55,13 @@
 		return status == Status.ERROR;
 	}
 
-
-	static void Foo(string value) {
-
-	}
-
 	public static void Main() {
 
 		Status status;
 		var question = new Question {
 			text = "What color is green grass?",
-			answerA = "blue",
-			answerB = "green",
-			answerC = "pink",
-			correctAnswer = "c",
+			answers = new[] { "blue", "green", "pink" },
+			correctAnswer = 2
 		};
 
 		Console.WriteLine(Program.ToString(question));

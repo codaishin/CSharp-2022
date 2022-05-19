@@ -3,12 +3,13 @@
 ## Content
 
 - [Simple Console App](#simple-console-app)
-- [Variables](#variables)
+- [Variables and Types](#variables-and-types)
 - [Value vs. Reference Type](#value-vs-reference-type)
 - [Nullables](#nullables)
 - [Loops](#loops)
 - [Branching](#branching)
 - [Functions/Methods](#functionsmethods)
+- [Lambda Functions](#lambda-functions)
 - [File IO](#file-io)
 - [Error Handling](#error-handling)
 
@@ -61,7 +62,7 @@ Console.WriteLine(input);
 
 [back to top](#content)
 
-## Variables
+## Variables and Types
 
 ### Declaration
 
@@ -531,10 +532,26 @@ Console.WriteLine(msg);
 
 ### Local Function
 
-- no accessors
+- no static
+- can access containing scope
 
 ```csharp
-int Sum(int a, int b) {
+var text = "Hello, World";
+
+void localFunc() {
+	Console.WriteLine(text);
+}
+
+localFunc();
+```
+
+### Local Static Method
+
+- with static
+- isolated from containing scope
+
+```csharp
+static int Sum(int a, int b) {
 	return a + b;
 }
 
@@ -542,14 +559,14 @@ var sum = Sum(2, 4);
 Console.WriteLine(sum);
 ```
 
-### Static Method
+### Static Method in Class
 ```csharp
 class Program {
 	static int Sum(int a, int b) {
 		return a + b;
 	}
 
-	public static void Main(string[] args) {
+	static void Main(string[] args) {
 		var sum = Program.Sum(2, 4);
 		Console.WriteLine(sum);
 	}
@@ -754,6 +771,61 @@ class Program {
 		Console.WriteLine(IntExtensions.IsIn(item, items));
 	}
 }
+```
+
+[back to top](#content)
+
+## Lambda Functions
+
+### Lambda Function - Func
+
+- returns non-void
+
+```csharp
+Func<int, float, bool> areEqual = (a, b) => a == b;
+
+Console.WriteLine(areEqual(2, 2.0f));
+```
+
+```csharp
+var areEqual = (int a, float b) => a == b;
+
+Console.WriteLine(areEqual(2, 2.0f));
+```
+
+### Lambda Function - Action
+
+- return void
+
+```csharp
+Action<int, float> print = (a, b) => Console.WriteLine($"{a}, {b}");
+
+print(2, 2.0f);
+```
+
+```csharp
+var print = (int a, float b) => Console.WriteLine($"{a}, {b}");
+
+print(2, 2.0f);
+```
+
+### Lambda Function - Multiline
+
+```csharp
+var sum = (int a, int b) => {
+	var result = a + b;
+	return result;
+};
+
+Console.WriteLine(sum(4, 1));
+```
+
+### Methods with Lambda Syntax
+
+```csharp
+static int Sum(int a, int b) => a + b;
+
+Console.WriteLine(Sum(2, 3));
 ```
 
 [back to top](#content)

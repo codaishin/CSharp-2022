@@ -3,14 +3,20 @@
 ## Content
 
 - [Simple Console App](#simple-console-app)
-- [Variables](#variables)
+- [Variables and Types](#variables-and-types)
 - [Value vs. Reference Type](#value-vs-reference-type)
 - [Nullables](#nullables)
 - [Loops](#loops)
 - [Branching](#branching)
 - [Functions/Methods](#functionsmethods)
+- [Lambda Functions](#lambda-functions)
 - [File IO](#file-io)
 - [Error Handling](#error-handling)
+- [Namespaces](#namespaces);
+- [Generators](#generators);
+- [Memory Management](#memory-management);
+- [Components/Dlls](#componentsdlls);
+- [OOP](#oop);
 
 ## Simple Console App
 
@@ -61,7 +67,7 @@ Console.WriteLine(input);
 
 [back to top](#content)
 
-## Variables
+## Variables and Types
 
 ### Declaration
 
@@ -529,12 +535,37 @@ Console.WriteLine(msg);
 - **parameters**: parameters injected into function
 - Convention: `camelCase` with first character `UPPERCASE`
 
-### Local Function
+### Accessors
 
-- no accessors
+- **no static**: Can only be run on an instance (special meaning for local methods)
+- **static**: Can only be run on the type (special meaning for local methods)
+- **public**: Can be run from anywhere
+- **private**: Can only be run from within the same type or an instance of that type
+
+See examples in [Usage - Wrong access](#usage---wrong-access)
+
+### Local Method
+
+- no static
+- can access containing scope
 
 ```csharp
-int Sum(int a, int b) {
+var text = "Hello, World";
+
+void localFunc() {
+	Console.WriteLine(text);
+}
+
+localFunc();
+```
+
+### Local Static Method
+
+- with static
+- isolated from containing scope
+
+```csharp
+static int Sum(int a, int b) {
 	return a + b;
 }
 
@@ -542,14 +573,14 @@ var sum = Sum(2, 4);
 Console.WriteLine(sum);
 ```
 
-### Static Method
+### Static Method in Class
 ```csharp
 class Program {
 	static int Sum(int a, int b) {
 		return a + b;
 	}
 
-	public static void Main(string[] args) {
+	static void Main(string[] args) {
 		var sum = Program.Sum(2, 4);
 		Console.WriteLine(sum);
 	}
@@ -564,7 +595,7 @@ class Program {
 		Console.WriteLine(100);
 	}
 
-	public static void Main() {
+	static void Main() {
 		Program.Print100();  // prints 100
 	}
 }
@@ -581,7 +612,7 @@ class Program {
 		Console.WriteLine(value);
 	}
 
-	public static void Main() {
+	static void Main() {
 		Program.Print("hello", true);  // prints HELLO
 	}
 }
@@ -595,7 +626,7 @@ class Program {
 		return 42;
 	}
 
-	public static void Main() {
+	static void Main() {
 		Console.WriteLine(Program.GetPerfectNumber());  // prints 42
 	}
 }
@@ -609,7 +640,7 @@ class Program {
 		return a + b;
 	}
 
-	public static void Main() {
+	static void Main() {
 		Console.WriteLine(Program.Sum(1, 2));  // prints 3
 	}
 }
@@ -623,7 +654,7 @@ class Program {
 		Console.WriteLine(string.Join(delim, values));
 	}
 
-	public static void Main() {
+	static void Main() {
 		var array = new[] { 1, 2, 3 };
 		Program.Print(array);       // prints 1, 2, 3
 		Program.Print(array, "|");  // prints 1|2|3
@@ -645,7 +676,7 @@ class Program {
 		return a + b;
 	}
 
-	public static void Main() {
+	static void Main() {
 		Console.WriteLine(Sum(1, 2, 4));
 		Console.WriteLine(Sum(4, 2));
 	}
@@ -664,7 +695,7 @@ class Program {
 		return sum;
 	}
 
-	public static void Main() {
+	static void Main() {
 		var array = new[] { 2, 9, 3 };
 		Console.WriteLine(Sum(array));  // prints 14
 		Console.WriteLine(Sum(2, 3, 1, 3));  // prints 9
@@ -686,7 +717,7 @@ class Program {
 		return true;
 	}
 
-	public static void Main() {
+	static void Main() {
 		var success = Program.Div(10, 0, out float result);
 		var msg = success ? $"result: {result}" : "null division error";
 		Console.WriteLine(msg);
@@ -706,7 +737,7 @@ class Program {
 		a = b;
 		b = tmp;
 	}
-	public static void Main() {
+	static void Main() {
 		var first = 1;
 		var second = 2;
 
@@ -727,7 +758,7 @@ class Program {
 		Console.WriteLine();
 	}
 
-	public static void Main() {
+	static void Main() {
 		Program.Print(2.2, 3);      // prints 2.2, 2.2, 2.2
 		Program.Print(4, 2);        // prints 4 4
 		Program.Print("hello", 3);  // prints hello hello hello
@@ -738,6 +769,7 @@ class Program {
 ### Extensions
 
 - must be in a static class
+- method must be public
 
 ```csharp
 static class IntExtensions {
@@ -747,7 +779,7 @@ static class IntExtensions {
 }
 
 class Program {
-	public static void Main() {
+	static void Main() {
 		var item = 5;
 		var items = new[] { 1, 2, 3, 4 };
 		Console.WriteLine(item.IsIn(items));
@@ -758,22 +790,77 @@ class Program {
 
 [back to top](#content)
 
+## Lambda Functions
+
+### Lambda Function - Func
+
+- returns non-void
+
+```csharp
+Func<int, float, bool> areEqual = (a, b) => a == b;
+
+Console.WriteLine(areEqual(2, 2.0f));
+```
+
+```csharp
+var areEqual = (int a, float b) => a == b;
+
+Console.WriteLine(areEqual(2, 2.0f));
+```
+
+### Lambda Function - Action
+
+- return void
+
+```csharp
+Action<int, float> print = (a, b) => Console.WriteLine($"{a}, {b}");
+
+print(2, 2.0f);
+```
+
+```csharp
+var print = (int a, float b) => Console.WriteLine($"{a}, {b}");
+
+print(2, 2.0f);
+```
+
+### Lambda Function - Multiline
+
+```csharp
+var sum = (int a, int b) => {
+	var result = a + b;
+	return result;
+};
+
+Console.WriteLine(sum(4, 1));
+```
+
+### Methods with Lambda Syntax
+
+```csharp
+static int Sum(int a, int b) => a + b;
+
+Console.WriteLine(Sum(2, 3));
+```
+
+[back to top](#content)
+
 ## File IO
 
 ### Read File
 
+```csharp
+var lines = File.ReadAllLines("text.txt");
+foreach (var line in lines) {
+	Console.WriteLine(line);
+}
+```
 ```csharp
 using var file = File.Open("text.txt", FileMode.Open);
 using var read = new StreamReader(file);
 
 string? line;
 while ((line = read.ReadLine()) is not null) {
-	Console.WriteLine(line);
-}
-```
-```csharp
-var lines = File.ReadAllLines("text.txt");
-foreach (var line in lines) {
 	Console.WriteLine(line);
 }
 ```
@@ -865,6 +952,348 @@ class Program {
 
 	...
 }
+```
+
+[back to top](#content)
+
+## Namespaces
+
+### Group Code
+
+#### Foo.cs
+```csharp
+namespace MyNamespace {
+	struct MyFoo {
+		...
+	}
+}
+```
+
+#### Bar.cs
+```csharp
+namespace MyNamespace {
+	namespace MyNestedNamespace {
+		struct MyBar {
+			...
+		}
+	}
+}
+```
+
+### Individual namespace access
+
+```csharp
+var bar = new MyNamespace.MyBar{ ... };
+var foo = new MyNamespace.MyNestedNamespace.MyFoo{ ... };
+```
+
+### Local using statement
+
+```csharp
+using MyNamespace;
+
+var bar = new MyBar{ ... };
+var foo = new MyNamespace.MyNestedNamespace.MyFoo{ ... };
+```
+
+```csharp
+using MyNamespace;
+using MyNamespace.MyNestedNamespace;
+
+var bar = new MyBar{ ... };
+var foo = new MyFoo{ ... };
+```
+
+### Global using statement
+
+#### MyFileA.cs
+```csharp
+global using MyNamespace;
+global using MyNamespace.MyNestedNamespace;
+```
+
+#### MyFileB.cs
+```csharp
+var bar = new MyBar{ ... };
+var foo = new MyFoo{ ... };
+```
+
+[back to top](#content)
+
+## Generators
+
+- allows iteration at least once
+- enable lazy iteration
+
+### IEnumerable
+
+```csharp
+IEnumerable<int> Elements() {
+	yield return 1;
+	yield return 2;
+	yield return 3;
+}
+
+var elements = Elements();
+foreach (var element in elements) {
+	Console.WriteLine(element);
+}
+```
+
+### IEnumerator
+
+```csharp
+IEnumerator<int> Elements() {
+	yield return 1;
+	yield return 2;
+	yield return 3;
+}
+
+var enumerator = Elements();
+while (enumerator.MoveNext()) {
+	Console.WriteLine(enumerator.Current);
+}
+```
+
+### No Generator Eager - Example
+
+```csharp
+int[] Elements() {
+	var elements = new int[3];
+	Console.WriteLine("add 1");
+	elements[0] = 1;
+	Console.WriteLine("add 2");
+	elements[1] = 2;
+	Console.WriteLine("add 3");
+	elements[2] = 3;
+	return elements;
+}
+
+var elements = Elements();
+Console.WriteLine("after call before loop");
+foreach (var element in elements) {
+	Console.WriteLine($"read {element}");
+}
+```
+
+### No Generator Eager - Output
+
+```console
+add 1
+add 2
+add 3
+after call before loop
+read 1
+read 2
+read 3
+```
+
+### Generator Lazy - Example
+
+```csharp
+IEnumerable<int> Elements() {
+	Console.WriteLine("yield 1");
+	yield return 1;
+	Console.WriteLine("yield 2");
+	yield return 2;
+	Console.WriteLine("yield 3");
+	yield return 3;
+}
+
+var elements = Elements();
+Console.WriteLine("after call before loop");
+foreach (var element in elements) {
+	Console.WriteLine($"read {element}");
+}
+
+```
+
+### Lazy - Example - Output
+
+```console
+after call before loop
+yield 1
+read 1
+yield 2
+read 2
+yield 3
+read 3
+```
+
+
+[back to top](#content)
+
+## Memory Management
+
+### Garbage Collection
+
+- Garbage Collection (GC) handles memory
+- Stops program execution at its onw convenience to check and free memory
+- GC can be invoked manually (which is rarely actually useful)
+
+### Unsafe
+
+- unsafe code can be used for manual memory management
+
+```csharp
+using System.Runtime.InteropServices;
+
+unsafe {
+	var array = (int*)NativeMemory.Alloc(sizeof(int) * 5);
+	for (var i = 0; i < 5; ++i) {
+		array[i] = i;
+	}
+	for (var i = 0; i < 5; ++i) {
+		Console.WriteLine(array[i]);
+	}
+	NativeMemory.Free(array);
+}
+```
+
+[back to top](#content)
+
+## Components/Dlls
+
+- A **ddl** is a shared library that can be used by many client programs
+
+### Build
+
+#### In bin\Debug\net6.0 (assumes .Net 6)
+```console
+dotnet build
+```
+
+#### In bin\Release\net6.0 (assumes .Net 6)
+```console
+dotnet build --configuration Release
+```
+
+### Usage - manual
+
+- add to `.csproj` file
+
+```
+<ItemGroup>
+	<Reference Include="MyNamespace">
+		<HintPath>/path/to/MyNamespace.dll</HintPath>
+	</Reference>
+</ItemGroup>
+```
+
+### Usage - package manager
+
+- example for NUnit dlls
+- will install the dlls, if not already installed
+- will modify `.csproj` with `<PackageReference>` entries
+
+```
+$ dotnet add package Microsoft.NET.Test.Sdk
+$ dotnet add package NUnit
+$ dotnet add package Nunit3TestAdapter
+```
+
+[back to top](#content)
+
+## OOP
+
+### Definition - Properties
+
+```csharp
+class Circle {
+	private double radius;
+
+	public double Radius {
+		get => this.radius;
+		set => this.radius = value;
+	}
+
+	public double Diameter {
+		get => this.radius * 2;
+		set => this.radius = value / 2;
+	}
+
+	...
+}
+```
+
+### Definition - Methods
+
+```csharp
+class Circle {
+	...
+
+	public double Area() {
+		return Math.PI * Math.Pow(this.radius, 2);
+	}
+
+	public override string ToString() {
+		return $"Circle: radius = {this.radius}";
+	}
+
+	public static Circle Merge(Circle a, Circle b) {
+		return new Circle { Radius = a.radius + b.radius };
+	}
+}
+```
+
+### Usage
+
+```csharp
+var circleA = new Circle { Radius = 4 };
+var circleB = new Circle { Radius = 3 };
+Console.WriteLine(circleA);
+Console.WriteLine(circleA.Area());
+Console.WriteLine(Circle.Merge(circleA, circleB));
+```
+
+### Usage - Wrong access
+
+#### Can't access `private` variable
+
+```csharp
+Console.WriteLine(circleA.radius);  // will not compile
+```
+
+#### Can't access `static` Method on an instance
+
+```csharp
+Console.WriteLine(circleA.Merge(circleA, circleB));  // will not compile
+```
+
+#### Can't access `non static` Method on the type
+
+```csharp
+Console.WriteLine(Circle.Area());  // will not compile
+```
+
+### Interface - Definition
+
+```csharp
+interface IShape2D {
+	double Area();
+}
+
+class Circle : IShape2D {
+	...
+}
+
+class Square : IShape2D {
+	...
+}
+```
+
+### Interface - Usage
+
+```csharp
+static double SumAreas(IEnumerable<IShape2D> shapes) {
+	return shapes.Select(s => s.Area()).Sum();
+}
+
+var shapes = new IShape2D[] {
+	new Circle { Radius = 10 },
+	new Square { Side = 4 },
+};
+Console.WriteLine(SumAreas(shapes));
 ```
 
 [back to top](#content)

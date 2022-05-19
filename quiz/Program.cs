@@ -28,7 +28,7 @@
 		return $"{question.text}\n{string.Join(", ", answers)}";
 	}
 
-	static string ToString(Question question, Status status) {
+	static string ToStringCorrect(Question question, Status status) {
 		return status switch {
 			Status.CORRECT => "Correct!",
 			Status.INCORRECT => string.Format(
@@ -55,21 +55,39 @@
 		return status == Status.ERROR;
 	}
 
+	static Question[] GetQuestions() {
+		return new[] {
+			new Question {
+				text = "What color is green grass?",
+				answers = new[] { "blue", "green", "pink" },
+				correctAnswer = 2
+			},
+			new Question {
+				text = "What color is pink grass?",
+				answers = new[] { "blue", "square", "pink" },
+				correctAnswer = 1
+			},
+		};
+	}
+
 	public static void Main() {
 
 		Status status;
-		var question = new Question {
-			text = "What color is green grass?",
-			answers = new[] { "blue", "green", "pink" },
-			correctAnswer = 2
-		};
+		int correct = 0;
+		var questions = Program.GetQuestions();
 
-		Console.WriteLine(Program.ToString(question));
+		foreach (var question in questions) {
+			Console.WriteLine(Program.ToString(question));
 
-		do {
-			var input = Console.ReadLine()!;
-			status = Program.Evaluate(question, input);
-			Console.WriteLine(Program.ToString(question, status));
-		} while (Program.ShouldRepeat(status));
+			do {
+				var input = Console.ReadLine()!;
+				status = Program.Evaluate(question, input);
+				if (status == Status.CORRECT) {
+					++correct;
+				}
+				Console.WriteLine(Program.ToStringCorrect(question, status));
+			} while (Program.ShouldRepeat(status));
+		}
+		Console.WriteLine($"{correct} out of {questions.Length} correct");
 	}
 }

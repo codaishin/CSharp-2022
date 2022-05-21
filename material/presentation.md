@@ -983,8 +983,8 @@ namespace MyNamespace {
 ### Individual namespace access
 
 ```csharp
-var bar = new MyNamespace.MyBar{ ... };
-var foo = new MyNamespace.MyNestedNamespace.MyFoo{ ... };
+var bar = new MyNamespace.MyFoo{ ... };
+var foo = new MyNamespace.MyNestedNamespace.MyBar{ ... };
 ```
 
 ### Local using statement
@@ -992,16 +992,16 @@ var foo = new MyNamespace.MyNestedNamespace.MyFoo{ ... };
 ```csharp
 using MyNamespace;
 
-var bar = new MyBar{ ... };
-var foo = new MyNamespace.MyNestedNamespace.MyFoo{ ... };
+var bar = new MyFoo{ ... };
+var foo = new MyNamespace.MyNestedNamespace.MyBar{ ... };
 ```
 
 ```csharp
 using MyNamespace;
 using MyNamespace.MyNestedNamespace;
 
-var bar = new MyBar{ ... };
-var foo = new MyFoo{ ... };
+var bar = new MyFoo{ ... };
+var foo = new MyBar{ ... };
 ```
 
 ### Global using statement
@@ -1014,8 +1014,8 @@ global using MyNamespace.MyNestedNamespace;
 
 #### MyFileB.cs
 ```csharp
-var bar = new MyBar{ ... };
-var foo = new MyFoo{ ... };
+var bar = new MyFoo{ ... };
+var foo = new MyBar{ ... };
 ```
 
 [back to top](#content)
